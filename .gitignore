@@ -1,0 +1,4 @@
+.DS_Store
+.claude/settings.local.json
+# Real trial outputs live here per the runner convention; only results-example/ ships.
+trials/results/

@@ -1,0 +1,29 @@
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: leak guard (fail-closed — no internal markers in the public tree)
+        run: bash scripts/guard.sh .
+      - name: shellcheck
+        run: shellcheck install.sh tests/test-install.sh scripts/guard.sh hooks/stakes-check.sh trials/build-package.sh
+      - name: test package matches the Txx files (generator is the single source)
+        run: bash trials/build-package.sh && git diff --exit-code trials/TEST-PACKAGE.md
+      - name: installer scenarios
+        run: bash tests/test-install.sh
+      - name: canon size backstop (100 lines, 12500 bytes on the installed EN primary)
+        run: |
+          n=$(wc -l < canon/CLAUDE-canon-universal.md)
+          b=$(wc -c < canon/CLAUDE-canon-universal.md)
+          echo "canon: $n lines, $b bytes"
+          [ "$n" -le 100 ] && [ "$b" -le 12500 ]
+      - name: EN/PL version stamps in sync (EN stamp = PL stamp)
+        run: |
+          en=$(grep -oE 'canon version: v[0-9]+\.[0-9]+' canon/CLAUDE-canon-universal.md | grep -oE 'v[0-9]+\.[0-9]+')
+          pl=$(grep -oE 'wersja kanonu: v[0-9]+\.[0-9]+' canon/CLAUDE-canon-universal.pl.md | grep -oE 'v[0-9]+\.[0-9]+')
+          echo "EN=$en PL=$pl"
+          [ -n "$en" ] && [ "$en" = "$pl" ]
