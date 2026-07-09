@@ -2,3 +2,10 @@
 .claude/settings.local.json
 # Real trial outputs live here per the runner convention; only results-example/ ships.
 trials/results/
+
+# Sekrety — nigdy nie commituj (WS1 guard, 2026-07-09)
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
