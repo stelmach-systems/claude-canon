@@ -1,5 +1,7 @@
 # claude-canon
 
+**English** · [Polski](README.pl.md)
+
 **A small, hard set of working rules for AI coding agents — injected into every session, and tested to make sure the model actually *applies* them.**
 
 [![ci](https://github.com/stelmach-systems/claude-canon/actions/workflows/ci.yml/badge.svg)](https://github.com/stelmach-systems/claude-canon/actions/workflows/ci.yml)
